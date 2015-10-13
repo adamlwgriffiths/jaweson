@@ -46,10 +46,10 @@ class Serialiser(object):
     python_types = tuple()
     serialised_types = tuple()
 
-    def to_json(self, obj):
+    def to_dict(self, obj):
         raise ValueError('Unknown data type: {}'.format(type(obj)))
 
-    def from_json(self, jobj):
+    def from_dict(self, jobj):
         raise ValueError('Unknown data type: {}'.format(jobj))
 
 
@@ -57,7 +57,7 @@ class NumpySerialiser(Serialiser):
     python_types = (np.ndarray, np.generic)
     serialised_types = ('ndarray', 'npgeneric')
 
-    def to_json(self, obj):
+    def to_dict(self, obj):
         if isinstance(obj, np.ndarray):
             return {
                 '__type__': 'ndarray',
@@ -72,9 +72,9 @@ class NumpySerialiser(Serialiser):
                 'dtype': obj.dtype.str,
             }
 
-        return super(NumpySerialiser, self).to_json(obj)
+        return super(NumpySerialiser, self).to_dict(obj)
 
-    def from_json(self, jobj):
+    def from_dict(self, jobj):
         obj = np.fromstring(
             base64.b64decode(jobj['data']),
             dtype=np.dtype(jobj['dtype'])
@@ -84,14 +84,14 @@ class NumpySerialiser(Serialiser):
         if jobj.get('__type__') == 'npgeneric':
             return obj[0]
 
-        return super(NumpySerialiser, self).from_json(jobj)
+        return super(NumpySerialiser, self).from_dict(jobj)
 
 
 class PythonTypeSerialiser(Serialiser):
     python_types = (set, tuple, complex)
     serialised_types = ('set', 'tuple', 'complex')
 
-    def to_json(self, obj):
+    def to_dict(self, obj):
         if isinstance(obj, set):
             return {
                 '__type__': 'set',
@@ -108,9 +108,9 @@ class PythonTypeSerialiser(Serialiser):
                 'data': obj.__repr__()
             }
 
-        return super(PythonTypeSerialiser, self).to_json(obj)
+        return super(PythonTypeSerialiser, self).to_dict(obj)
 
-    def from_json(self, jobj):
+    def from_dict(self, jobj):
         obj = np.fromstring(
             base64.b64decode(jobj['data']),
             dtype=np.dtype(jobj['dtype'])
@@ -122,4 +122,4 @@ class PythonTypeSerialiser(Serialiser):
         if jobj.get('__type__') == 'complex':
             return complex(obj['data'])
 
-        return super(PythonTypeSerialiser, self).from_json(jobj)
+        return super(PythonTypeSerialiser, self).from_dict(jobj)

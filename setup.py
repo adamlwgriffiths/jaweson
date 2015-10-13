@@ -15,6 +15,7 @@ setup(
     description='Powerful serialisation for JSON, without the risk',
     license='BSD',
     author='Adam Griffiths',
+    author_email='adam.lw.griffiths@gmail.com',
     url='https://github.com/adamlwgriffiths/jaweson',
     install_requires=[],
     platforms=['any'],

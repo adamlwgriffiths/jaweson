@@ -46,7 +46,7 @@ class Serialisable(object):
         return True
 
     @classmethod
-    def to_json(cls, obj):
+    def to_dict(cls, obj):
         '''Serialises the object, by default serialises anything
         that isn't prefixed with _, isn't in the blacklist, and isn't
         callable.
@@ -56,10 +56,10 @@ class Serialisable(object):
             for k in dir(obj)
             if cls.serialisable(k, obj)
         }
-        #raise NotImplementedError('No to_json for {}'.format(cls.__class__.__name__))
+        #raise NotImplementedError('No to_dict for {}'.format(cls.__class__.__name__))
 
     @classmethod
-    def from_json(cls, jobj):
+    def from_dict(cls, jobj):
         '''Deserialises the object.
         Automatically inspects the object's __init__ function and
         extracts the parameters.
@@ -93,19 +93,19 @@ class SerialisableSerialiser(Serialiser):
     python_types = (Serialisable,)
     serialised_types = ('serialisable',)
 
-    def to_json(self, obj):
+    def to_dict(self, obj):
         if isinstance(obj, Serialisable):
             cls_name = obj.__class__.__name__
-            data = obj.to_json(obj)
+            data = obj.to_dict(obj)
             data.update({
                 '__type__': 'serialisable',
                 '__class__': cls_name,
             })
             return data
 
-        return super(SerialisableSerialiser, self).to_json(obj)
+        return super(SerialisableSerialiser, self).to_dict(obj)
 
-    def from_json(self, jobj):
+    def from_dict(self, jobj):
         global _types
 
         if jobj.get('__type__') == 'serialisable':
@@ -114,9 +114,9 @@ class SerialisableSerialiser(Serialiser):
                 raise NotImplementedError('No type registered for {}'.format(cls_name))
 
             cls = _types[cls_name]
-            if not hasattr(cls, 'from_json'):
-                raise NotImplementedError('No from_json classmethod for type {}'.format(cls_name))
+            if not hasattr(cls, 'from_dict'):
+                raise NotImplementedError('No from_dict classmethod for type {}'.format(cls_name))
 
-            return cls.from_json(jobj)
+            return cls.from_dict(jobj)
 
-        return super(SerialisableSerialiser, self).from_json(jobj)
+        return super(SerialisableSerialiser, self).from_dict(jobj)

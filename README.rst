@@ -85,17 +85,17 @@ This class provides functionality to:
 
 
 Custom parsing can be provided by overloading the jaweson.Serialisable
-to_json and from_json class methods.::
+to_dict and from_dict class methods.::
 
     class MyObject(jaweson.Serialisable):
         @classmethod
-        def to_json(cls, obj):
-            data = super(MyObject, cls).to_json(obj)
+        def to_dict(cls, obj):
+            data = super(MyObject, cls).to_dict(obj)
             data['my_value'] = obj.my_other_value
 
         @classmethod
-        def from_json(cls, jobj):
-            obj = super(MyObject, cls).from_json(jobj)
+        def from_dict(cls, jobj):
+            obj = super(MyObject, cls).from_dict(jobj)
             obj.my_other_value = jobj['my_value']
 
 
@@ -114,7 +114,7 @@ The following code is for the built-in Python type serialiser::
         python_types = (set, tuple, complex)
         serialised_types = ('set', 'tuple', 'complex')
 
-        def to_json(self, obj):
+        def to_dict(self, obj):
             if isinstance(obj, set):
                 return {
                     '__type__': 'set',
@@ -131,9 +131,9 @@ The following code is for the built-in Python type serialiser::
                     'data': obj.__repr__()
                 }
 
-            return super(PythonTypeSerialiser, self).to_json(obj)
+            return super(PythonTypeSerialiser, self).to_dict(obj)
 
-        def from_json(self, jobj):
+        def from_dict(self, jobj):
             obj = np.fromstring(
                 base64.b64decode(jobj['data']),
                 dtype=np.dtype(jobj['dtype'])
@@ -145,7 +145,7 @@ The following code is for the built-in Python type serialiser::
             if jobj.get('__type__') == 'complex':
                 return complex(obj['data'])
 
-            return super(PythonTypeSerialiser, self).from_json(jobj)
+            return super(PythonTypeSerialiser, self).from_dict(jobj)
 
 
 Gotchas
