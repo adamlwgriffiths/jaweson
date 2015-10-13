@@ -111,15 +111,11 @@ class PythonTypeSerialiser(Serialiser):
         return super(PythonTypeSerialiser, self).to_dict(obj)
 
     def from_dict(self, jobj):
-        obj = np.fromstring(
-            base64.b64decode(jobj['data']),
-            dtype=np.dtype(jobj['dtype'])
-        )
         if jobj.get('__type__') == 'set':
-            return set(obj['data'])
+            return set(jobj['data'])
         if jobj.get('__type__') == 'tuple':
-            return tuple(obj['data'])
+            return tuple(jobj['data'])
         if jobj.get('__type__') == 'complex':
-            return complex(obj['data'])
+            return complex(jobj['data'])
 
         return super(PythonTypeSerialiser, self).from_dict(jobj)
