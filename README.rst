@@ -1,14 +1,14 @@
-=====
-JSOME
-=====
+=======
+JAWESON
+=======
 
-JSON + Awesome serialisation = JSOME
+JSON + Awesome serialisation = JAWESON
 
-JSOME provides a modular serialisation framework for JSON parsing.
+JAWESON provides a modular serialisation framework for JSON parsing.
 The functions themselves are not dependent on JSON and can be repurposed to
 any serialisation format that handles dicts, lists, strings, ints and floats.
 
-JSOME avoids using pickle to avoid potential security issues. Should your pickle
+JAWESON avoids using pickle to avoid potential security issues. Should your pickle
 store (database, s3, etc) become compromised, your system could be tricked into
 running malicious code.
 
@@ -17,24 +17,24 @@ non-JSON friendly types.
 
 Example::
 
-    import jsome
+    import jaweson as json
     import numpy as np
 
     a = [1,2,3]
-    j = jsome.dumps(a)
+    j = json.dumps(a)
     print j
     >>> [1, 2, 3]
-    b = jsome.loads(j)
+    b = json.loads(j)
     assert b == a
 
     a = np.array([1,2,3], dtype=np.float32)
-    j = jsome.dumps(a)
+    j = json.dumps(a)
     print j
     >>> {"data": "AACAPwAAAEAAAEBA", "shape": [3], "__type__": "ndarray", "dtype": "<f4"}
-    b = jsome.loads(j)
+    b = json.loads(j)
     assert (b == a).all()
 
-    class Test(jsome.Serialisable):
+    class Test(json.Serialisable):
         def __init__(self):
             self.a = 1
 
@@ -42,17 +42,17 @@ Example::
             self.a = 2
 
     a = Test()
-    j = jsome.dumps(a)
+    j = json.dumps(a)
     print j
     >>> {"a": 1, "__type__": "serialisable", "__class__": "Test"}
-    b = jsome.loads(j)
+    b = json.loads(j)
     assert b.a is 1
 
     a.modify()
-    j = jsome.dumps(a)
+    j = json.dumps(a)
     print j
     >>> {"a": 2, "__type__": "serialisable", "__class__": "Test"}
-    b = jsome.loads(j)
+    b = json.loads(j)
 
     assert b.a is 2
 
@@ -60,7 +60,7 @@ Example::
 Out-of-the-box Support
 ======================
 
-JSOME supports serialisation of the following types out-of-the-box:
+JAWESON supports serialisation of the following types out-of-the-box:
 
 * default JSON types (dict, list, string, int, float, null)
 * set
@@ -74,7 +74,7 @@ JSOME supports serialisation of the following types out-of-the-box:
 Object Serialisation
 ====================
 
-JSOME supports object serialisation through the use of a jsom.Serialisable
+JAWESON supports object serialisation through the use of a jsom.Serialisable
 base class.
 
 This class provides functionality to:
@@ -84,10 +84,10 @@ This class provides functionality to:
 * Automatically construct and deserialise values.
 
 
-Custom parsing can be provided by overloading the jsome.Serialisable
+Custom parsing can be provided by overloading the jaweson.Serialisable
 to_json and from_json class methods.::
 
-    class MyObject(jsome.Serialisable):
+    class MyObject(jaweson.Serialisable):
         @classmethod
         def to_json(cls, obj):
             data = super(MyObject, cls).to_json(obj)
@@ -102,13 +102,13 @@ to_json and from_json class methods.::
 Custom Serialisers
 ==================
 
-Support for new seralisers can be added by inheriting from the jsome.Serialiser class.
+Support for new seralisers can be added by inheriting from the jaweson.Serialiser class.
 
-Classes are automatically registered with the jsome serialiser when parsed.
+Classes are automatically registered with the jaweson serialiser when parsed.
 
 The following code is for the built-in Python type serialiser::
 
-    from jsome import Serialiser
+    from jaweson import Serialiser
 
     class PythonTypeSerialiser(Serialiser):
         python_types = (set, tuple, complex)
@@ -154,15 +154,17 @@ Gotchas
 Constructors that modify incoming data can be a problem. Ensure you only
 use simple constructors::
 
-    class BadClass(jsome.Serialisable):
+    import jaweson as json
+
+    class BadClass(json.Serialisable):
         def __init__(self, a):
             self.a = a * 2
 
     a = BadClass(1)
-    j = jsome.dumps(a)
+    j = json.dumps(a)
     print a.a
     >>> 2
-    b = jsome.loads(j)
+    b = json.loads(j)
     print b.a
     >>> 4
 
@@ -175,7 +177,7 @@ Data format
 ===========
 
 
-JSOME stores complex objects in the following structure::
+JAWESON stores complex objects in the following structure::
 
     {
         '__type__': '<type name>',
@@ -183,7 +185,7 @@ JSOME stores complex objects in the following structure::
     }
 
 
-JSOME implements the following serialisation formats.
+JAWESON implements the following serialisation formats.
 
 numpy.ndarray::
 
@@ -223,7 +225,7 @@ complex::
         'data': '<base 64 encoded data>',
     }
 
-jsome.Serialisable::
+jaweson.Serialisable::
 
     {
         '__type__': 'serialisable',

@@ -6,11 +6,11 @@ except ImportError:
     from distutils.core import setup
 
 
-with open('jsome/version.py', 'r') as f:
+with open('jaweson/version.py', 'r') as f:
     exec(f.read())
 
 setup(
-    name='jsome',
+    name='jaweson',
     version=__version__,
     description='Powerful serialisation for JSON, without the risk',
     license='BSD',
