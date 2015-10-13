@@ -12,7 +12,7 @@ with open('jaweson/version.py', 'r') as f:
 setup(
     name='jaweson',
     version=__version__,
-    description='Powerful serialisation for JSON, without the risk',
+    description='A safe, modular, format agnostic, serialiser. Provides support for JSON, MsgPack',
     license='BSD',
     author='Adam Griffiths',
     url='https://github.com/adamlwgriffiths/jaweson',
