@@ -298,3 +298,8 @@ TODO
 
 * datetime serialisation
 
+
+Authors
+=======
+
+* `Adam Griffiths <https://github.com/adamlwgriffiths>`_
