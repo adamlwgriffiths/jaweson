@@ -2,9 +2,9 @@
 JAWESON
 =======
 
-JSON + Awesome serialisation = JAWESON
+JSON + Awesome serialisation = JAWESON (and now MsgPack)
 
-JAWESON provides a modular serialisation framework for JSON parsing.
+JAWESON provides a modular serialisation framework for JSON / MsgPack parsing.
 The functions themselves are not dependent on JSON and can be repurposed to
 any serialisation format that handles dicts, lists, strings, ints and floats.
 
@@ -13,11 +13,11 @@ store (database, s3, etc) become compromised, your system could be tricked into
 running malicious code.
 
 Avoiding pickle is not without a cost, and that is the need to provide support for
-non-JSON friendly types.
+non-serialisation friendly types.
 
 Example::
 
-    import jaweson as json
+    from jaweson import json
     import numpy as np
 
     a = [1,2,3]
@@ -62,13 +62,34 @@ Out-of-the-box Support
 
 JAWESON supports serialisation of the following types out-of-the-box:
 
-* default JSON types (dict, list, string, int, float, null)
+* default serialisable types (dict, list, string, int, float, null)
 * set
 * tuple
 * np.ndarray
 * np.generic
 * jsom.Serialisable
+* JSON support
+* MSGPack support
 
+
+JSON Support
+============
+
+Import the JSON module from Jaweson::
+
+    from jaweson import json
+    json.dumps(set([1,2,3]))
+    >>> {"data": [1, 2, 3], "__type__": "set"}
+
+
+MSGPack Support
+===============
+
+Import the msgpack module from Jaweson::
+
+    from jaweson import msgpack as json
+    json.dumps(set([1,2,3]))
+    >>> ��data��__type__�set
 
 
 Object Serialisation
@@ -154,7 +175,7 @@ Gotchas
 Constructors that modify incoming data can be a problem. Ensure you only
 use simple constructors::
 
-    import jaweson as json
+    import jaweson import json
 
     class BadClass(json.Serialisable):
         def __init__(self, a):
