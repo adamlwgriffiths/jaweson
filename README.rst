@@ -2,11 +2,14 @@
 JAWESON
 =======
 
-JSON + Awesome serialisation = JAWESON (and now MsgPack)
+(JSON|MsgPack) + Awesome serialisation = JAWESON
 
-JAWESON provides a modular serialisation framework for JSON / MsgPack parsing.
-The functions themselves are not dependent on JSON and can be repurposed to
+JAWESON provides a modular de|serialisation framework.
+The functions themselves are not dependent on any one framework and can be repurposed to
 any serialisation format that handles dicts, lists, strings, ints and floats.
+
+JAWESOME provides the ability to automatically serialise objects with the
+only change being an inherited jaweson.Serialisable class.
 
 JAWESON avoids using pickle to avoid potential security issues. Should your pickle
 store (database, s3, etc) become compromised, your system could be tricked into
@@ -15,7 +18,7 @@ running malicious code.
 Avoiding pickle is not without a cost, and that is the need to provide support for
 non-serialisation friendly types.
 
-Example::
+An example of using JAWESON to de|serialise JSON::
 
     from jaweson import json
     import numpy as np
@@ -57,6 +60,16 @@ Example::
     assert b.a is 2
 
 
+The same example will work with MsgPack if the import is changed from::
+
+    from jaweson import json
+
+
+To::
+
+    from jaweson import msgpack as json
+
+
 Out-of-the-box Support
 ======================
 
@@ -67,7 +80,7 @@ JAWESON supports serialisation of the following types out-of-the-box:
 * tuple
 * np.ndarray
 * np.generic
-* jsom.Serialisable
+* jaweson.Serialisable
 * JSON support
 * MSGPack support
 
@@ -92,10 +105,10 @@ Import the msgpack module from Jaweson::
     >>> ��data��__type__�set
 
 
-Object Serialisation
-====================
+Automatic Object Serialisation
+==============================
 
-JAWESON supports object serialisation through the use of a jsom.Serialisable
+JAWESON supports object serialisation through the use of a jaweson.Serialisable
 base class.
 
 This class provides functionality to:
@@ -105,19 +118,59 @@ This class provides functionality to:
 * Automatically construct and deserialise values.
 
 
-Custom parsing can be provided by overloading the jaweson.Serialisable
-to_dict and from_dict class methods.::
+For 99% of cases, you are not required to make any change to your class, except
+to inherit from jaweson.Serialisable.::
 
-    class MyObject(jaweson.Serialisable):
+
+    from jaweson import json
+
+    class MyObject(json.Serialisable):
+        def __init__(self):
+            self.a = 1
+
+        def modify(self):
+            self.a = 2
+
+    a = MyObject()
+    a.modify()
+    j = json.dumps(a)
+    print j
+    >>> {"a": 2, "__type__": "serialisable", "__class__": "MyObject"}
+    b = json.loads(j)
+    b.a is 2
+    >>> True
+
+
+Should automatical de|serialisation not work, or require custom de|serialisation,
+parsing can be overriden through the jaweson.Serialisable to_dict and from_dict
+class methods.::
+
+    from jaweson import Serialisable
+
+    class MyCustomSerialisableObject(Serialisable):
         @classmethod
         def to_dict(cls, obj):
-            data = super(MyObject, cls).to_dict(obj)
+            data = super(MyCustomSerialisableObject, cls).to_dict(obj)
             data['my_value'] = obj.my_other_value
 
         @classmethod
         def from_dict(cls, jobj):
-            obj = super(MyObject, cls).from_dict(jobj)
+            obj = super(MyCustomSerialisableObject, cls).from_dict(jobj)
             obj.my_other_value = jobj['my_value']
+
+
+White|Blacklisting variables is achieved through the class variables __blacklist and __whitelist.::
+
+    from jaweson import Serialisable
+
+    class BlacklistObject(Serialisable):
+        __blacklist = ['dont_serialise']
+        __whitelist = ['__im_required']
+
+        def __init__(self):
+            self.dont_serialise = 5
+            self.__im_required = 10
+
 
 
 Custom Serialisers
@@ -172,23 +225,8 @@ The following code is for the built-in Python type serialiser::
 Gotchas
 =======
 
-Constructors that modify incoming data can be a problem. Ensure you only
-use simple constructors::
-
-    import jaweson import json
-
-    class BadClass(json.Serialisable):
-        def __init__(self, a):
-            self.a = a * 2
-
-    a = BadClass(1)
-    j = json.dumps(a)
-    print a.a
-    >>> 2
-    b = json.loads(j)
-    print b.a
-    >>> 4
-
+Ensure you use unique class names
+---------------------------------
 
 Having multiple classes with the same name defined will cause the de-serialiser
 to become confused and fail.
