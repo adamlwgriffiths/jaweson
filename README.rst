@@ -12,7 +12,7 @@ JSOME avoids using pickle to avoid potential security issues. Should your pickle
 store (database, s3, etc) become compromised, your system could be tricked into
 running malicious code.
 
-This is not without a cost, and that is the need to provide support for
+Avoiding pickle is not without a cost, and that is the need to provide support for
 non-JSON friendly types.
 
 Example::
@@ -62,12 +62,12 @@ Out-of-the-box Support
 
 JSOME supports serialisation of the following types out-of-the-box:
 
- * default JSON types (dict, list, string, int, float, null)
- * set
- * tuple
- * np.ndarray
- * np.generic
- * jsom.Serialisable
+* default JSON types (dict, list, string, int, float, null)
+* set
+* tuple
+* np.ndarray
+* np.generic
+* jsom.Serialisable
 
 
 
@@ -79,9 +79,9 @@ base class.
 
 This class provides functionality to:
 
- * Automatically register itself for creation.
- * Automatically serialise values.
- * Automatically construct and deserialise values.
+* Automatically register itself for creation.
+* Automatically serialise values.
+* Automatically construct and deserialise values.
 
 
 Custom parsing can be provided by overloading the jsome.Serialisable
@@ -186,6 +186,7 @@ JSOME stores complex objects in the following structure::
 JSOME implements the following serialisation formats.
 
 numpy.ndarray::
+
     {
         '__type__': 'ndarray',
         'data': '<base 64 encoded data>',
@@ -234,5 +235,5 @@ jsome.Serialisable::
 TODO
 ====
 
- * datetime serialisation
+* datetime serialisation
 
