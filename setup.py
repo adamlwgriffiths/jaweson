@@ -15,11 +15,11 @@ setup(
     description='Powerful serialisation for JSON, without the risk',
     license='BSD',
     author='Adam Griffiths',
-    url='https://github.com/adamlwgriffiths/jsome',
+    url='https://github.com/adamlwgriffiths/jaweson',
     install_requires=[],
     platforms=['any'],
     #test_suite='tests',
-    packages=['jsome'],
+    packages=['jaweson'],
     classifiers=[
         'Natural Language :: English',
         'Intended Audience :: Developers',
