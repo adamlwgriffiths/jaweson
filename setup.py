@@ -16,7 +16,7 @@ setup(
     license='BSD',
     author='Adam Griffiths',
     url='https://github.com/adamlwgriffiths/jsome',
-    install_requires=['json'],
+    install_requires=[],
     platforms=['any'],
     #test_suite='tests',
     packages=['jsome'],
