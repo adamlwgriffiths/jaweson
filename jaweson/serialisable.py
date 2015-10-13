@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-import inspect
 from .serialiser import Serialiser
 
 
@@ -27,15 +26,27 @@ class Serialisable(object):
     __metaclass__ = SerialisableMetaClass
 
     # stores a list of class attributes which should not be serialised
-    _blacklist = []
+    __whitelist = []
+    __blacklist = []
 
     @classmethod
     def serialisable(cls, key, obj):
         '''Determines what can be serialised and what shouldn't
         '''
-        if key.startswith('_'):
+        # ignore class method names
+        if key.startswith('_Serialisable'.format(cls.__name__)):
             return False
-        if key in obj._blacklist:
+        if key in obj.__whitelist:
+            return True
+        # class variables will be prefixed with '_<cls.__name__>__variable'
+        # so let's remove these too
+        #if key.startswith('__'):
+        if '__' in key:
+            return False
+        # ignore our own class variables
+        #if key in ['_Serialisable__whitelist', '_Serialisable__blacklist']:
+        #    return False
+        if key in obj.__blacklist:
             return False
         if callable(getattr(obj, key)):
             return False
@@ -48,7 +59,7 @@ class Serialisable(object):
     @classmethod
     def to_dict(cls, obj):
         '''Serialises the object, by default serialises anything
-        that isn't prefixed with _, isn't in the blacklist, and isn't
+        that isn't prefixed with __, isn't in the blacklist, and isn't
         callable.
         '''
         return {
@@ -66,23 +77,10 @@ class Serialisable(object):
         Can be trivially over-written.
         '''
         try:
-            signature = inspect.getargspec(cls.__init__)
-            kwargs = {}
-            for arg in signature.args:
-                if arg in jobj:
-                    kwargs[arg] = jobj[arg]
-
-            obj = cls(**kwargs)
-
-            # set any values that aren't passed via the constructor
-            # also include the class blacklist in case it has changed
-            # we don't want to deserialise newly blacklisted variables
-            blacklist = set(['__class__', '__type__'] + cls._blacklist)
-            for k in set(jobj.keys()) - set(kwargs.keys()) - blacklist:
+            obj = cls.__new__(cls)
+            blacklist = set(['__class__', '__type__'] + cls.__blacklist)
+            for k in set(jobj.keys()) - blacklist:
                 setattr(obj, k, jobj[k])
-
-            # it would be preferable to use this method
-            #obj = cls.__new__(cls, **jobj)
 
             return obj
         except Exception as e:
