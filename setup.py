@@ -18,7 +18,7 @@ setup(
     url='https://github.com/someones/jaweson',
     install_requires=[],
     platforms=['any'],
-    #test_suite='tests',
+    test_suite='tests',
     packages=['jaweson'],
     classifiers=[
         'Natural Language :: English',
