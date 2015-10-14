@@ -66,7 +66,6 @@ To::
     from jaweson import msgpack as json
 
 
-======================
 Out-of-the-box Support
 ======================
 
@@ -219,7 +218,6 @@ The following code is for the built-in Python type serialiser::
             return super(PythonTypeSerialiser, self).from_dict(jobj)
 
 
-=======
 Gotchas
 =======
 
@@ -291,7 +289,6 @@ JSON imposes a limitation that dictionary keys must be strings::
     >>> {u'1': 1, u'2': 2}
 
 
-===========
 Data format
 ===========
 
@@ -353,14 +350,12 @@ jaweson.Serialisable::
     }
 
 
-====
 TODO
 ====
 
 * datetime serialisation
 
 
-=======
 Authors
 =======
 
