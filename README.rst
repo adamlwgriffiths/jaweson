@@ -122,7 +122,7 @@ This class provides functionality to:
 
 
 For 99% of cases, you are not required to make any change to your class, except
-to inherit from jaweson.Serialisable.::
+to inherit from jaweson.Serialisable::
 
 
     from jaweson import json
@@ -146,7 +146,7 @@ to inherit from jaweson.Serialisable.::
 
 Should automatical de|serialisation not work, or require custom de|serialisation,
 parsing can be overriden through the jaweson.Serialisable to_dict and from_dict
-class methods.::
+class methods::
 
     from jaweson import Serialisable
 
@@ -162,7 +162,7 @@ class methods.::
             obj.my_other_value = jobj['my_value']
 
 
-White|Blacklisting variables is achieved through the class variables __blacklist and __whitelist.::
+White|Blacklisting variables is achieved through the class variables __blacklist and __whitelist::
 
     from jaweson import Serialisable
 
@@ -240,7 +240,12 @@ Serialisable does not serialise any variables with '__' in its name
 
 To avoid serialising internal data-structures, Serialisable derived objects
 will not serialise variables with `__` in them by default.
-This can be over-ridden by defining specific variables in the `__whitelist` list.
+This can be over-ridden by defining specific variables in the `__whitelist` list::
+
+    class Obj(jaweson.Serialisable):
+        __whitelist = ['__a']
+        def __init__(self):
+            self.__a = 1
 
 
 Constructors are not called
@@ -263,7 +268,7 @@ And later change the value::
 Variables serialised before the change will still have the value `a=1`.
 
 To over-come this, over-ride the `from_dict` method to force the
-variable to the new value.::
+variable to the new value::
 
 
     class Obj(jaweson.Serialisable):
@@ -279,7 +284,7 @@ variable to the new value.::
 JSON does not support dict keys of type int
 -------------------------------------------
 
-JSON imposes a limitation that dictionary keys must be strings.::
+JSON imposes a limitation that dictionary keys must be strings::
 
     import msgpack
     msgpack.loads(msgpack.dumps({1:1,2:2}))
