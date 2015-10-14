@@ -204,10 +204,6 @@ The following code is for the built-in Python type serialiser::
             return super(PythonTypeSerialiser, self).to_dict(obj)
 
         def from_dict(self, jobj):
-            obj = np.fromstring(
-                base64.b64decode(jobj['data']),
-                dtype=np.dtype(jobj['dtype'])
-            )
             if jobj.get('__type__') == 'set':
                 return set(obj['data'])
             if jobj.get('__type__') == 'tuple':
