@@ -15,7 +15,7 @@ setup(
     description='A safe, modular, format agnostic, serialiser. Provides support for JSON, MsgPack',
     license='BSD',
     author='Adam Griffiths',
-    url='https://github.com/adamlwgriffiths/jaweson',
+    url='https://github.com/someones/jaweson',
     install_requires=[],
     platforms=['any'],
     #test_suite='tests',
