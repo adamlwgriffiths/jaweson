@@ -205,11 +205,11 @@ The following code is for the built-in Python type serialiser::
 
         def from_dict(self, jobj):
             if jobj.get('__type__') == 'set':
-                return set(obj['data'])
+                return set(jobj['data'])
             if jobj.get('__type__') == 'tuple':
-                return tuple(obj['data'])
+                return tuple(jobj['data'])
             if jobj.get('__type__') == 'complex':
-                return complex(obj['data'])
+                return complex(jobj['data'])
 
             return super(PythonTypeSerialiser, self).from_dict(jobj)
 
