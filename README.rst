@@ -232,6 +232,60 @@ Having multiple classes with the same name defined will cause the de-serialiser
 to become confused and fail.
 
 
+Serialisable does not serialise any variables with '__' in its name
+-------------------------------------------------------------------
+
+To avoid serialising internal data-structures, Serialisable derived objects
+will not serialise variables with `__` in them by default.
+This can be over-ridden by defining specific variables in the `__whitelist` list.
+
+
+Constructors are not called
+---------------------------
+
+If you define a constant in a class constructor::
+
+    class Obj(jaweson.Serialisable):
+        def __init__(self):
+            self.a = 1
+
+
+And later change the value::
+
+    class Obj(jaweson.Serialisable):
+        def __init__(self):
+            self.a = 2
+
+
+Variables serialised before the change will still have the value `a=1`.
+
+To over-come this, over-ride the `from_dict` method to force the
+variable to the new value.::
+
+
+    class Obj(jaweson.Serialisable):
+        @classmethod
+        def from_dict(cls, jobj):
+            obj = super(Obj, cls).from_dict(jobj)
+            obj.a = 2
+
+        def __init__(self):
+            self.a = 2
+
+
+JSON does not support dict keys of type int
+-------------------------------------------
+
+JSON imposes a limitation that dictionary keys must be strings.::
+
+    import msgpack
+    msgpack.loads(msgpack.dumps({1:1,2:2}))
+    >>> {1: 1, 2: 2}
+    import json
+    json.loads(json.dumps({1:1,2:2}))
+    >>> {u'1': 1, u'2': 2}
+
+
 Data format
 ===========
 
