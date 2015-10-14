@@ -26,19 +26,13 @@ An example of using JAWESON to de|serialise JSON::
     from jaweson import json
     import numpy as np
 
-    a = [1,2,3]
-    j = json.dumps(a)
-    print j
-    >>> [1, 2, 3]
-    b = json.loads(j)
-    assert b == a
-
     a = np.array([1,2,3], dtype=np.float32)
     j = json.dumps(a)
     print j
     >>> {"data": "AACAPwAAAEAAAEBA", "shape": [3], "__type__": "ndarray", "dtype": "<f4"}
     b = json.loads(j)
-    assert (b == a).all()
+    (b == a).all()
+    >>> True
 
     class Test(json.Serialisable):
         def __init__(self):
@@ -48,19 +42,14 @@ An example of using JAWESON to de|serialise JSON::
             self.a = 2
 
     a = Test()
-    j = json.dumps(a)
-    print j
-    >>> {"a": 1, "__type__": "serialisable", "__class__": "Test"}
-    b = json.loads(j)
-    assert b.a is 1
-
     a.modify()
     j = json.dumps(a)
     print j
     >>> {"a": 2, "__type__": "serialisable", "__class__": "Test"}
     b = json.loads(j)
 
-    assert b.a is 2
+    b.a is 2
+    >>> True
 
 
 The same example will work with MsgPack if the import is changed from::
