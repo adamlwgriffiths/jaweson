@@ -2,6 +2,9 @@
 JAWESON
 =======
 
+.. image:: https://travis-ci.org/someones/jaweson.svg?branch=master
+    :target: https://travis-ci.org/someones/jaweson
+
 (JSON|MsgPack) + Awesome serialisation = JAWESON
 
 JAWESON provides a modular de|serialisation framework.
