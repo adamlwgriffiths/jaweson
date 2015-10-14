@@ -15,7 +15,7 @@ JAWESON provides a modular de|serialisation framework.
 The functions themselves are not dependent on any one framework and can be repurposed to
 any serialisation format that handles dicts, lists, strings, ints and floats.
 
-JAWESOME provides the ability to automatically serialise objects with the
+JAWESON provides the ability to automatically serialise objects with the
 only change being an inherited jaweson.Serialisable class.
 
 JAWESON avoids using pickle to avoid potential security issues. Should your pickle
@@ -220,6 +220,8 @@ The following code is for the built-in Python type serialiser::
 
 Gotchas
 =======
+
+.. image:: https://gist.githubusercontent.com/adamlwgriffiths/1e239df99d8f3699ce2e/raw/cbea36c8e8ad2c2e53979d76f75c8cecec12a266/spagett.gif
 
 Ensure you use unique class names
 ---------------------------------
