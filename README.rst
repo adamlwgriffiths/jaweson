@@ -267,6 +267,7 @@ variable to the new value::
         def from_dict(cls, jobj):
             obj = super(Obj, cls).from_dict(jobj)
             obj.a = 2
+            return obj
 
         def __init__(self):
             self.a = 2
