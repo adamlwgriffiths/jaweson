@@ -9,7 +9,7 @@ def register_class(obj, clsname=None):
     global _types
     name = clsname or obj.__name__
     if name in _types:
-        raise TypeError('A class with the name "{}"" is already defined'.format(name))
+        raise TypeError('A class with the name "{}" is already defined'.format(name))
     _types[name] = obj
 
 
