@@ -168,6 +168,22 @@ White|Blacklisting variables is achieved through the class variables __blacklist
             self.__im_required = 10
 
 
+Sometimes you rename classes or need to / from migrate from another format.
+Over-riding the serialised class name can be achieved by setting the desired
+name for the `__classname` variable of the jaweson.Serialiser class::
+
+    class NewClass(jaweson.Serialisable):
+        __classname = 'OldClass'
+
+        def __init__(self):
+            self.a = 1
+
+
+    a = NewClass()
+    j = jaweson.dumps(a)
+    print j
+    {"a": 1, "__type__": "serialisable", "__class__": "OldClass"}
+
 
 Custom Serialisers
 ==================
@@ -219,11 +235,40 @@ Gotchas
 
 .. image:: https://gist.githubusercontent.com/adamlwgriffiths/1e239df99d8f3699ce2e/raw/cbea36c8e8ad2c2e53979d76f75c8cecec12a266/spagett.gif
 
-Ensure you use unique class names
+
+Jawson expects unique class names
 ---------------------------------
 
 Having multiple classes with the same name defined will cause the de-serialiser
 to become confused and fail.
+
+To get around this, assign a string value to the `__classname` property of the Serialisable class::
+
+    class Duplicate(jaweson.Serialisable):
+        __classname = 'AnotherDuplicate'
+
+        def __init__(self):
+            self.a = 1
+            self.classname = "I'm really Duplicate"
+
+
+    class AnotherDuplicate(jaweson.Serialisable):
+        __classname = 'Duplicate'
+
+        def __init__(self):
+            self.b = 2
+            self.classname = "I'm really AnotherDuplicate"
+
+    a = Duplicate()
+    b = AnotherDuplicate()
+    assert a.a is 1
+    assert b.b is 2
+    ja = jaweson.dumps(a)
+    jb = jaweson.dumps(b)
+    print ja
+    {"a": 1, "classname": "I'm really Duplicate", "__type__": "serialisable", "__class__": "AnotherDuplicate"}
+    print jb
+    {"b": 2, "classname": "I'm really AnotherDuplicate", "__type__": "serialisable", "__class__": "Duplicate"}
 
 
 Serialisable does not serialise any variables with '__' in its name

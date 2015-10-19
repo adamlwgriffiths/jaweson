@@ -140,6 +140,7 @@ class TestSerialiser(unittest.TestCase):
 
     def test_class_variable(self):
         class ClassVariableObject(jaweson.Serialisable):
+            __classname = 'TestImHere'
             a = 1
 
         obj = ClassVariableObject()
@@ -247,6 +248,43 @@ class TestSerialiser(unittest.TestCase):
         assert obj.name == jobj.name
         assert obj.child.name == jobj.child.name
         assert obj.child.child.name == jobj.child.child.name
+
+    def test_classname(self):
+        class NewClass(json.Serialisable):
+            __classname = 'OldClass'
+
+            def __init__(self):
+                self.a = 1
+
+        a = NewClass()
+        assert a.a is 1
+        j = json.dumps(a)
+        assert 'OldClass' in j
+
+    def test_classname_inheritance(self):
+        class ClassA(json.Serialisable):
+            __classname = 'ThisClass'
+
+            def __init__(self):
+                self.a = 1
+
+        class ClassB(ClassA):
+
+            def __init__(self):
+                self.a = 2
+
+        a = ClassA()
+        b = ClassB()
+        assert a.a is 1
+        assert b.a is 2
+        ja = json.dumps(a)
+        jb = json.dumps(b)
+        assert 'ThisClass' in ja
+        assert 'ClassB' in jb
+        a2 = json.loads(ja)
+        b2 = json.loads(jb)
+        assert a2.a is 1
+        assert b2.a is 2
 
 
 if __name__ == '__main__':

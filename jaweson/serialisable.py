@@ -5,9 +5,9 @@ from .serialiser import Serialiser
 _types = {}
 
 
-def register_class(obj):
+def register_class(obj, clsname=None):
     global _types
-    name = obj.__name__
+    name = clsname or obj.__name__
     if name in _types:
         raise TypeError('A class with the name "{}"" is already defined'.format(name))
     _types[name] = obj
@@ -18,12 +18,15 @@ class SerialisableMetaClass(type):
         '''Automatically registers Serialisable subclasses at class definition time.
         '''
         newclass = super(SerialisableMetaClass, cls).__new__(cls, clsname, bases, attrs)
-        register_class(newclass)  # here is your register function
+        serialised_cls = getattr(newclass, '_{}__classname'.format(clsname), None)
+        register_class(newclass, serialised_cls)
         return newclass
 
 
 class Serialisable(object):
     __metaclass__ = SerialisableMetaClass
+
+    __classname = None
 
     # stores a list of class attributes which should not be serialised
     __whitelist = []
@@ -93,11 +96,12 @@ class SerialisableSerialiser(Serialiser):
 
     def to_dict(self, obj):
         if isinstance(obj, Serialisable):
-            cls_name = obj.__class__.__name__
+            cls = obj.__class__
+            clsname = getattr(obj, '_{}__classname'.format(cls.__name__), None) or cls.__name__
             data = obj.to_dict(obj)
             data.update({
                 '__type__': 'serialisable',
-                '__class__': cls_name,
+                '__class__': clsname,
             })
             return data
 
