@@ -27,12 +27,13 @@ non-serialisation friendly types.
 
 An example of using JAWESON to de|serialise JSON::
 
+    from __future__ import print_function
     from jaweson import json
     import numpy as np
 
     a = np.array([1,2,3], dtype=np.float32)
     j = json.dumps(a)
-    print j
+    print(j)
     >>> {"data": "AACAPwAAAEAAAEBA", "shape": [3], "__type__": "ndarray", "dtype": "<f4"}
     b = json.loads(j)
     (b == a).all()
@@ -48,7 +49,7 @@ An example of using JAWESON to de|serialise JSON::
     a = Test()
     a.modify()
     j = json.dumps(a)
-    print j
+    print(j)
     >>> {"a": 2, "__type__": "serialisable", "__class__": "Test"}
     b = json.loads(j)
 
@@ -130,7 +131,7 @@ to inherit from jaweson.Serialisable::
     a = MyObject()
     a.modify()
     j = json.dumps(a)
-    print j
+    print(j)
     >>> {"a": 2, "__type__": "serialisable", "__class__": "MyObject"}
     b = json.loads(j)
     b.a is 2
@@ -181,8 +182,8 @@ name for the `__classname` variable of the jaweson.Serialiser class::
 
     a = NewClass()
     j = jaweson.dumps(a)
-    print j
-    {"a": 1, "__type__": "serialisable", "__class__": "OldClass"}
+    print(j)
+    >>> {"a": 1, "__type__": "serialisable", "__class__": "OldClass"}
 
 
 Custom Serialisers
@@ -261,14 +262,16 @@ To get around this, assign a string value to the `__classname` property of the S
 
     a = Duplicate()
     b = AnotherDuplicate()
-    assert a.a is 1
-    assert b.b is 2
+    a.a is 1
+    >>> True
+    b.b is 2
+    >>> True
     ja = jaweson.dumps(a)
     jb = jaweson.dumps(b)
-    print ja
-    {"a": 1, "classname": "I'm really Duplicate", "__type__": "serialisable", "__class__": "AnotherDuplicate"}
-    print jb
-    {"b": 2, "classname": "I'm really AnotherDuplicate", "__type__": "serialisable", "__class__": "Duplicate"}
+    print(ja)
+    >>> {"a": 1, "classname": "I'm really Duplicate", "__type__": "serialisable", "__class__": "AnotherDuplicate"}
+    print(jb)
+    >>> {"b": 2, "classname": "I'm really AnotherDuplicate", "__type__": "serialisable", "__class__": "Duplicate"}
 
 
 Serialisable does not serialise any variables with '__' in its name
