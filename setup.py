@@ -28,7 +28,6 @@ setup(
         'Operating System :: POSIX',
         'Programming Language :: Python',
         'License :: OSI Approved :: BSD License',
-        'Topic :: Multimedia :: Graphics',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
