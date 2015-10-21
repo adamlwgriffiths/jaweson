@@ -11,3 +11,5 @@ Note: A badly written class could still parse internal data using eval.
 from __future__ import absolute_import
 from .serialisable import Serialisable
 from .serialiser import Serialiser
+
+from .version import __version__
