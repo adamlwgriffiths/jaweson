@@ -9,6 +9,7 @@ with the `register_type` function.
 Note: A badly written class could still parse internal data using eval.
 """
 from __future__ import absolute_import
+from .base import to_dict, from_dict
 from .serialisable import Serialisable
 from .serialiser import Serialiser
 
