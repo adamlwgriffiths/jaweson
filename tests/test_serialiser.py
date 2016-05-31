@@ -1,5 +1,8 @@
 import unittest
 import numpy as np
+from datetime import datetime, time, date
+import pytz
+from dateutil import parser as dateparser
 import jaweson
 from jaweson import json, msgpack
 
@@ -111,6 +114,46 @@ class TestSerialiser(unittest.TestCase):
         assert obj == jobj
         assert obj.dtype == jobj.dtype
         assert isinstance(jobj, np.generic)
+
+    def test_date(self):
+        obj = date(2013, 3, 27)
+        mobj = msgpack.loads(msgpack.dumps(obj))
+        jobj = json.loads(json.dumps(obj))
+
+        assert obj == mobj
+        assert obj == jobj
+
+    def test_time(self):
+        obj = time(23, 5)
+        mobj = msgpack.loads(msgpack.dumps(obj))
+        jobj = json.loads(json.dumps(obj))
+
+        assert obj == mobj
+        assert obj == jobj
+
+        eastern = pytz.timezone('US/Eastern')
+        obj = time(23, 5, tzinfo=eastern)
+        mobj = msgpack.loads(msgpack.dumps(obj))
+        jobj = json.loads(json.dumps(obj))
+
+        assert obj == mobj
+        assert obj == jobj
+
+    def test_datetime(self):
+        obj = datetime(2013, 3, 27, 23, 5)
+        mobj = msgpack.loads(msgpack.dumps(obj))
+        jobj = json.loads(json.dumps(obj))
+
+        assert obj == mobj
+        assert obj == jobj
+
+        eastern = pytz.timezone('US/Eastern')
+        obj = datetime(2013, 3, 27, 23, 5, tzinfo=eastern)
+        mobj = msgpack.loads(msgpack.dumps(obj))
+        jobj = json.loads(json.dumps(obj))
+
+        assert obj == mobj
+        assert obj == jobj
 
     def test_serialisable(self):
         class SerialisableObject(jaweson.Serialisable):

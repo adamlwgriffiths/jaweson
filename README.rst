@@ -75,6 +75,7 @@ JAWESON supports serialisation of the following types out-of-the-box:
 * default serialisable types (dict, list, string, int, float, null)
 * set
 * tuple
+* date, time, datetime
 * np.ndarray
 * np.generic
 * jaweson.Serialisable
@@ -393,12 +394,6 @@ jaweson.Serialisable::
         '__class__': '<class name>',
 
     }
-
-
-TODO
-====
-
-* datetime serialisation
 
 
 Authors
