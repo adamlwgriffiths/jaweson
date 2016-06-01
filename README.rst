@@ -26,34 +26,39 @@ non-serialisation friendly types.
 
 An example of using JAWESON to de|serialise JSON::
 
-    from __future__ import print_function
-    from jaweson import json
-    import numpy as np
+    >>> from jaweson import json
+    >>> import numpy as np
 
-    a = np.array([1,2,3], dtype=np.float32)
-    j = json.dumps(a)
-    print(j)
-    >>> {"data": "AACAPwAAAEAAAEBA", "shape": [3], "__type__": "ndarray", "dtype": "<f4"}
-    b = json.loads(j)
-    (b == a).all()
-    >>> True
+    >>> # serialise
+    >>> a = np.array([1,2,3], dtype=np.float32)
+    >>> j = json.dumps(a)
+    >>> print j
+    {"data": "AACAPwAAAEAAAEBA", "shape": [3], "__type__": "ndarray", "dtype": "<f4"}
 
-    class Test(json.Serialisable):
-        def __init__(self):
-            self.a = 1
+    >>> # deserialise
+    >>> b = json.loads(j)
+    >>> (b == a).all()
+    True
 
-        def modify(self):
-            self.a = 2
+    >>> # custom serialisable
+    >>> class Test(json.Serialisable):
+    >>>     def __init__(self):
+    >>>         self.a = 1
+    >>>
+    >>>     def modify(self):
+    >>>         self.a = 2
+    >>>
+    >>> # serialise
+    >>> a = Test()
+    >>> a.modify()
+    >>> j = json.dumps(a)
+    >>> print j
+    {"a": 2, "__type__": "serialisable", "__class__": "Test"}
 
-    a = Test()
-    a.modify()
-    j = json.dumps(a)
-    print(j)
-    >>> {"a": 2, "__type__": "serialisable", "__class__": "Test"}
-    b = json.loads(j)
-
-    b.a is 2
-    >>> True
+    >>> # deserialise
+    >>> b = json.loads(j)
+    >>> a.a == b.a
+    True
 
 
 The same example will work with MsgPack if the import is changed from::
