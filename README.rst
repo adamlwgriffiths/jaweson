@@ -1,4 +1,3 @@
-
 .. image:: https://gist.githubusercontent.com/adamlwgriffiths/1e239df99d8f3699ce2e/raw/4a1afbc8e863712b6cae1a4bfd28cc019e47c480/jaweson.png
 
 
@@ -75,12 +74,21 @@ JAWESON supports serialisation of the following types out-of-the-box:
 * default serialisable types (dict, list, string, int, float, null)
 * set
 * tuple
-* date, time, datetime
-* np.ndarray
-* np.generic
+* date, time, datetime (optional)
+* np.ndarray, np.generic (optional)
 * jaweson.Serialisable
 * JSON support
-* MSGPack support
+* MSGPack support (optional)
+
+
+Dependencies
+============
+
+* msgpack (optional for msgpack support  - `pip install jaweson[msgpack]`)
+* numpy (optional for numpy serialization - `pip install jaweson[numpy]`)
+* python-dateutil, pytz (optional for date/time serialization - `pip install jaweson[datetime]`)
+
+To install all dependencies, use `pip install jaweson[msgpack,numpy,datetime]`
 
 
 JSON Support
@@ -394,7 +402,6 @@ jaweson.Serialisable::
         '__class__': '<class name>',
 
     }
-
 
 Authors
 =======

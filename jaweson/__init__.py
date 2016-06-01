@@ -12,5 +12,6 @@ from __future__ import absolute_import
 from .base import to_dict, from_dict
 from .serialisable import Serialisable
 from .serialiser import Serialiser
+from .serialisers import base, datetime, numpy
 
 from .version import __version__

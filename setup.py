@@ -17,6 +17,12 @@ setup(
     author='Adam Griffiths',
     url='https://github.com/someones/jaweson',
     install_requires=[],
+    tests_require=['numpy', 'python-dateutil', 'pytz', 'msgpack-python'],
+    extras_require={
+        'numpy': ['numpy'],
+        'datetime': ['python-dateutil', 'pytz'],
+        'msgpack': ['msgpack-python'],
+    },
     platforms=['any'],
     test_suite='tests',
     packages=['jaweson'],
