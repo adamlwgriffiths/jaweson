@@ -2,5 +2,5 @@ language: python
 python:
     - "2.7"
 install:
-    - pip install requirements-all.txt
+    - pip install -r requirements-all.txt
 script: PYTHONPATH=. python -m unittest discover
