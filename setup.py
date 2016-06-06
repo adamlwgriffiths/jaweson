@@ -5,6 +5,13 @@ try:
 except ImportError:
     from distutils.core import setup
 
+try:
+    # fix for virtualbox builds
+    import os
+    del os.link
+except:
+    pass
+
 
 with open('jaweson/version.py', 'r') as f:
     exec(f.read())
