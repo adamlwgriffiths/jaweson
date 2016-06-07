@@ -152,7 +152,7 @@ to inherit from jaweson.Serialisable::
     >>> True
 
 
-Should automatical de|serialisation not work, or require custom de|serialisation,
+Should automatic de|serialisation not work, or require custom de|serialisation,
 parsing can be overriden through the jaweson.Serialisable to_dict and from_dict
 class methods::
 
@@ -183,7 +183,7 @@ White|Blacklisting variables is achieved through the class variables __blacklist
             self.__im_required = 10
 
 
-Sometimes you rename classes or need to / from migrate from another format.
+Sometimes you rename classes or need to migrate from another format.
 Over-riding the serialised class name can be achieved by setting the desired
 name for the `__classname` variable of the jaweson.Serialiser class::
 
