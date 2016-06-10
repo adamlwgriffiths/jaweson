@@ -32,7 +32,7 @@ setup(
     },
     platforms=['any'],
     test_suite='tests',
-    packages=['jaweson'],
+    packages=['jaweson', 'jaweson.serialisers'],
     classifiers=[
         'Natural Language :: English',
         'Intended Audience :: Developers',
